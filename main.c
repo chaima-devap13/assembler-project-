@@ -6,6 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+ //#include "error.h"
 
 void pass1(FILE *input);
 void pass2(FILE *input, FILE *output);
@@ -14,7 +15,7 @@ void pass2(FILE *input, FILE *output);
 void pass1(FILE *input) {
     char line[256];
     int address = 0;
-
+    
     while (fgets(line, sizeof(line), input)) {
         cleanLine(line);
         if (strlen(line) == 0) continue;
@@ -22,12 +23,19 @@ void pass1(FILE *input) {
         if (commandType(line) == L_COMMAND) {
             char symbol[50];
             getSymbol(line, symbol);
+           // if (containsSymbol(symbol)) {
+   // errorDuplicateLabel(symbol);
+//}
             addSymbol(symbol, address);
         } else {
             address++;
         }
     }
+   
 }
+    
+
+
 
 void pass2(FILE *input, FILE *output) {
     char line[256];

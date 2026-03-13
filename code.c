@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "code.h"
+#include "error.h"
+#include "code.h"
+#
 
 void intToBinary(int value, char *output) {
     for (int i = 15; i >= 0; i--) {
@@ -25,7 +28,7 @@ char* destTable(char *dest) {
     if (strcmp(dest, "AM") == 0)  return "101";
     if (strcmp(dest, "AD") == 0)  return "110";
     if (strcmp(dest, "AMD") == 0) return "111";
-    return "000";   // null
+    return "000";
 }
 
 /* ------------------ JUMP TABLE ------------------ */
@@ -38,7 +41,7 @@ char* jumpTable(char *jump) {
     if (strcmp(jump, "JNE") == 0) return "101";
     if (strcmp(jump, "JLE") == 0) return "110";
     if (strcmp(jump, "JMP") == 0) return "111";
-    return "000";   // null
+    return "000";
 }
 
 /* ------------------  ------------------ */
@@ -77,6 +80,7 @@ char* compTable(char *comp) {
     if (strcmp(comp, "D&M") == 0) return "1000000";
     if (strcmp(comp, "D|M") == 0) return "1010101";
 
+    
     return "0000000";
 }
 
