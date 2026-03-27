@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "code.h"
-#include "error.h"
-#include "code.h"
-#
+
 
 void intToBinary(int value, char *output) {
     for (int i = 15; i >= 0; i--) {
