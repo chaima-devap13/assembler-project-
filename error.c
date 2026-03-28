@@ -1,28 +1,38 @@
 #include<stdio.h>
 #include"error.h"
 #include<stdlib.h>
-
+  int errorCount = 0;
 void errorInvalidA(char *line, int lineNumber) {
     printf("Error at line %d: Invalid A-instruction -> %s\n", lineNumber, line);
-    exit(1);
+    errorCount++;
 }
 
-void errorInvalidComp(char *comp, int lineNumber) {
-    printf("Error at line %d: Invalid comp field -> %s\n", lineNumber, comp);
-    exit(1);
+void errorInvalidComp(char *comp, int lineNumber, char *line) {
+    printf("Error at line %d: Invalid comp '%s'\n", lineNumber, comp);
+    printf("Expected valid comp like: D, A, M, D+M, D-A...\n");
+    printf("Line: %s\n\n", line);
+    errorCount++;
 }
 
-void errorInvalidDest(char *dest, int lineNumber) {
-    printf("Error at line %d: Invalid dest field -> %s\n", lineNumber, dest);
-    exit(1);
+void errorInvalidDest(char *dest, int lineNumber, char *line) {
+    printf("Error at line %d: Invalid dest '%s'\n", lineNumber, dest);
+    printf("Expected: M, D, MD, A, AM, AD, AMD\n");
+    printf("Line: %s\n\n", line);
+    errorCount++;
 }
 
-void errorInvalidJump(char *jump, int lineNumber) {
+void errorInvalidJump(char *jump, int lineNumber, char *line) {
     printf("Error at line %d: Invalid jump field -> %s\n", lineNumber, jump);
-    exit(1);
+    printf("Expected: JGT, JEQ, JGE, JLT, JNE, JLE, JMP\n");
+    printf("Line: %s\n\n", line);
+    errorCount++;
 }
 
 void errorDuplicateLabel(char *label, int lineNumber) {
     printf("Error at line %d: Duplicate label -> %s\n", lineNumber, label);
-    exit(1);
+    errorCount++;
+}
+void errorInvalidSyntax(char *line, int lineNumber) {
+    printf("Error at line %d: Invalid syntax -> %s\n", lineNumber, line);
+    errorCount++;
 }

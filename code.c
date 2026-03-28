@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "code.h"
-
+#include"error.h"
 
 void intToBinary(int value, char *output) {
-    for (int i = 15; i >= 0; i--) {
-        output[15 - i] = ((value >> i) & 1) + '0';
+    for (int i = 0; i < 16; i++) {
+        output[i] = ((value >> (15 - i)) & 1) + '0';
     }
     output[16] = '\0';
-    
 }
 /* ------------------ ENCODE A ------------------ */
 
@@ -18,7 +17,8 @@ void encodeA(int value, char *output) {
 
 /* ------------------ DEST TABLE ------------------ */
 
-char* destTable(char *dest) {
+char* destTable(char *dest,int lineNumber,char *line) {
+    if (strcmp(dest, "null") == 0) return "000"; 
     if (strcmp(dest, "M") == 0)   return "001";
     if (strcmp(dest, "D") == 0)   return "010";
     if (strcmp(dest, "MD") == 0)  return "011";
@@ -26,12 +26,14 @@ char* destTable(char *dest) {
     if (strcmp(dest, "AM") == 0)  return "101";
     if (strcmp(dest, "AD") == 0)  return "110";
     if (strcmp(dest, "AMD") == 0) return "111";
-    return "000";
+    errorInvalidDest(dest, lineNumber, line);
+    return NULL;
 }
 
 /* ------------------ JUMP TABLE ------------------ */
 
-char* jumpTable(char *jump) {
+char* jumpTable(char *jump,int lineNumber,char *line) {
+    if(strcmp(jump,"null")==0) return "000";
     if (strcmp(jump, "JGT") == 0) return "001";
     if (strcmp(jump, "JEQ") == 0) return "010";
     if (strcmp(jump, "JGE") == 0) return "011";
@@ -39,12 +41,13 @@ char* jumpTable(char *jump) {
     if (strcmp(jump, "JNE") == 0) return "101";
     if (strcmp(jump, "JLE") == 0) return "110";
     if (strcmp(jump, "JMP") == 0) return "111";
-    return "000";
+    errorInvalidJump(jump, lineNumber, line);
+    return NULL;
 }
 
 /* ------------------  ------------------ */
 
-char* compTable(char *comp) {
+char* compTable(char *comp, int lineNumber, char *line) {
 
     if (strcmp(comp, "0") == 0)   return "0101010";
     if (strcmp(comp, "1") == 0)   return "0111111";
@@ -79,16 +82,22 @@ char* compTable(char *comp) {
     if (strcmp(comp, "D|M") == 0) return "1010101";
 
     
-    return "0000000";
+    errorInvalidComp(comp, lineNumber, line);
+return NULL;
 }
 
 /* ------------------ ENCODE C ------------------ */
 
-void encodeC(char *dest, char *comp, char *jump, char *output) {
+void encodeC(char *dest, char *comp, char *jump, char *output, int lineNumber, char *line) {
 
-    char *compBits = compTable(comp);
-    char *destBits = destTable(dest);
-    char *jumpBits = jumpTable(jump);
+    char *compBits = compTable(comp, lineNumber, line);
+    char *destBits = destTable(dest, lineNumber, line);
+    char *jumpBits = jumpTable(jump, lineNumber, line);
+
+    if (compBits == NULL || destBits == NULL || jumpBits == NULL) {
+        output[0] = '\0';   
+        return;
+    }
 
     sprintf(output, "111%s%s%s", compBits, destBits, jumpBits);
 }

@@ -55,7 +55,7 @@ void pass2(FILE *input, FILE *output) {
             getSymbol(line, symbol);
 
         if (!isValidAValue(symbol)) {
-        errorInvalidA(symbol, __LINE__);
+        errorInvalidA(symbol, lineNumber);
     }
 
             int value;
@@ -69,18 +69,31 @@ void pass2(FILE *input, FILE *output) {
             }
 
             char binary[17];
+            binary[0] = '\0';
             encodeA(value, binary);
-            fprintf(output, "%s\n", binary);
+            if (output != NULL) {
+    fprintf(output, "%s\n", binary);
+}
         }
 
         else if (type == C_COMMAND) {
-            char dest[10], comp[20], jump[10];
+            
+            if (!isValidCFormat(line)) {
+    errorInvalidSyntax(line, lineNumber);
+       continue;
+       }
+       char dest[10], comp[20], jump[10];
             parseC(line, dest, comp, jump);
 
             char binary[17];
-            encodeC(dest, comp, jump, binary);
+            binary[0] = '\0';
+encodeC(dest, comp, jump, binary, lineNumber, line);
 
-            fprintf(output, "%s\n", binary);
+if (binary[0] != '\0') {
+    if (output != NULL) {
+        fprintf(output, "%s\n", binary);
+    }
+}
         }
     }
 }
@@ -112,13 +125,7 @@ int main() {
         strcat(outputName, ".obj");
     }
 
-    FILE *output = fopen(outputName, "w");
-
-    if (output == NULL) {
-        printf("Error creating output file\n");
-        fclose(input);
-        return 1;
-    }
+    
 
     printf("\nInput file opened successfully!\n");
     printf("Output file will be: %s\n", outputName);
@@ -134,16 +141,35 @@ int main() {
 
    
 
+    pass2(input, NULL);
+if (errorCount == 0) {
+
+    FILE *output = fopen(outputName, "w");
+
+    if (output == NULL) {
+        printf("Error creating output file\n");
+        fclose(input);
+        return 1;
+    }
+
+    rewind(input);
+
     pass2(input, output);
 
-    
+    fclose(output);
 
     printSymbolTable();
 
-    fclose(input);
-    fclose(output);
+    printf("\nTranslation finished successfully.\n");
 
-    printf("Translation finished successfully.\n");
+} else {
+
+    printf("\nSymbol table not generated due to errors.\n");
+    printf("\n%d errors found.\n", errorCount);
+}
+    
+
+
 
     return 0;
 }

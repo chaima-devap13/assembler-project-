@@ -55,3 +55,37 @@ int isValidAValue(char *symbol) {
 
     return isValidSymbol(symbol);
 }
+
+int isValidCFormat(char *line) {
+
+    int eqCount = 0;
+    int scCount = 0;
+
+    for (int i = 0; line[i]; i++) {
+        if (line[i] == '=') eqCount++;
+        if (line[i] == ';') scCount++;
+    }
+
+    if (eqCount > 1 || scCount > 1)
+        return 0;
+
+    if (eqCount == 1) {
+        if (line[0] == '=')
+            return 0;
+    }
+
+    if (scCount == 1) {
+        if (line[strlen(line) - 1] == ';')
+            return 0;
+    }
+
+    if (eqCount == 1 && scCount == 1) {
+        char *eq = strchr(line, '=');
+        char *sc = strchr(line, ';');
+
+        if (eq > sc)
+            return 0;
+    }
+
+    return 1;
+}

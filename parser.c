@@ -17,21 +17,27 @@ void getSymbol(char *line, char *symbol) {
 }
 
 void parseC(char *line, char *dest, char *comp, char *jump) {
-    char *eq = strchr(line, '=');
-    char *sc = strchr(line, ';');
+
+    char temp[256];
+    strcpy(temp, line);   
+
+    char *eq = strchr(temp, '=');
+    char *sc = strchr(temp, ';');
 
     if (eq) {
-        strncpy(dest, line, eq - line);
-        dest[eq - line] = '\0';
-        line = eq + 1;
-    } else strcpy(dest, "null");
+        *eq = '\0';
+        strcpy(dest, temp);
+        strcpy(comp, eq + 1);
+    } else {
+        strcpy(dest, "null");
+        strcpy(comp, temp);
+    }
 
     if (sc) {
-        strncpy(comp, line, sc - line);
-        comp[sc - line] = '\0';
+        *sc = '\0';
+        strcpy(comp, eq ? eq + 1 : temp);
         strcpy(jump, sc + 1);
     } else {
-        strcpy(comp, line);
         strcpy(jump, "null");
     }
 }
