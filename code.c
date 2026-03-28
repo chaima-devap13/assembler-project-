@@ -31,7 +31,7 @@ char* destTable(char *dest,int lineNumber,char *line) {
 }
 
 /* ------------------ JUMP TABLE ------------------ */
-
+ // jumpTable takes a jump mnemonic (jump) and returns the corresponding 3-bit binary code as a string. Similar to destTable, it uses if statements to match the input mnemonic with its binary representation. If the input does not match any valid mnemonic, it calls an error handling function and returns NULL
 char* jumpTable(char *jump,int lineNumber,char *line) {
     if(strcmp(jump,"null")==0) return "000";
     if (strcmp(jump, "JGT") == 0) return "001";
@@ -45,8 +45,8 @@ char* jumpTable(char *jump,int lineNumber,char *line) {
     return NULL;
 }
 
-/* ------------------  ------------------ */
-
+/* ------------------ COMPARATOR TABLE ------------------ */
+ // compTable takes a computation mnemonic (comp) and returns the corresponding 7-bit binary code as a string. It uses a series of if statements to match the input mnemonic with its binary representation. If the input does not match any valid mnemonic, it calls an error handling function and returns NULL
 char* compTable(char *comp, int lineNumber, char *line) {
 
     if (strcmp(comp, "0") == 0)   return "0101010";
@@ -87,9 +87,9 @@ return NULL;
 }
 
 /* ------------------ ENCODE C ------------------ */
-
+// encodeC takes the dest, comp, and jump parts of a C-instruction and encodes them into a 16-bit binary string. It first retrieves the binary codes for each part using the corresponding tables (compTable, destTable, jumpTable). If any of the parts are invalid (i.e., if any of the tables return NULL), it sets the output to an empty string and returns. Otherwise, it constructs the final binary string in the format "111compBitsdestBitsjumpBits" and stores it in the output parameter
 void encodeC(char *dest, char *comp, char *jump, char *output, int lineNumber, char *line) {
-
+ 
     char *compBits = compTable(comp, lineNumber, line);
     char *destBits = destTable(dest, lineNumber, line);
     char *jumpBits = jumpTable(jump, lineNumber, line);
