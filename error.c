@@ -1,16 +1,17 @@
 #include<stdio.h>
 #include"error.h"
 #include<stdlib.h>
-  int errorCount = 0;
+  int errorCount = 0; // Global variable to track the number of errors
+  // Error handling functions for different types of errors encountered during assembly parsing and encoding. Each function prints a specific error message along with the line number and the offending line of code, and increments the global error count.
 void errorInvalidA(char *line, int lineNumber) {
     printf("Error at line %d: Invalid A-instruction -> %s\n", lineNumber, line);
-    errorCount++;
+    errorCount++; // Increment the error count for each invalid A-instruction
 }
 
 void errorInvalidComp(char *comp, int lineNumber, char *line) {
     printf("Error at line %d: Invalid comp '%s'\n", lineNumber, comp);
     printf("Expected valid comp like: D, A, M, D+M, D-A...\n");
-    printf("Line: %s\n\n", line);
+    printf("Line: %s\n\n", line);// Print the line of code that caused the error for better debugging
     errorCount++;
 }
 
