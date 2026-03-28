@@ -2,7 +2,7 @@
 #include <string.h>
 #include "code.h"
 #include"error.h"
-
+   // into binary : from assambly via binary with shift and bitwise operations
 void intToBinary(int value, char *output) {
     for (int i = 0; i < 16; i++) {
         output[i] = ((value >> (15 - i)) & 1) + '0';
@@ -10,13 +10,13 @@ void intToBinary(int value, char *output) {
     output[16] = '\0';
 }
 /* ------------------ ENCODE A ------------------ */
-
+  // ecodeA takes an integer value and converts it to a 16-bit binary string, which is stored in the output parameter. The function uses bitwise operations to extract each bit from the integer and constructs the binary string accordingly 
 void encodeA(int value, char *output) {
     intToBinary(value, output);
 }
 
 /* ------------------ DEST TABLE ------------------ */
-
+  // destTable takes a destination mnemonic (dest) and returns the corresponding 3-bit binary code as a string. It uses a series of if statements to match the input mnemonic with its binary representation. If the input does not match any valid mnemonic, it calls an error handling function and returns NULL
 char* destTable(char *dest,int lineNumber,char *line) {
     if (strcmp(dest, "null") == 0) return "000"; 
     if (strcmp(dest, "M") == 0)   return "001";
