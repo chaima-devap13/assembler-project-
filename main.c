@@ -27,7 +27,7 @@ void pass1(FILE *input) {
            if (containsSymbol(symbol)) {
                errorDuplicateLabel(symbol, lineNumber);
             }
-            addSymbol(symbol, address);
+            addSymbol(symbol, address,LABEL);
         } else {
             address++;
         }
@@ -63,7 +63,7 @@ void pass2(FILE *input, FILE *output) {
                 value = atoi(symbol);
             } else {
                 if (!containsSymbol(symbol)) {
-                    addSymbol(symbol, nextVarAddress++);
+                    addSymbol(symbol, nextVarAddress++,VARIABLE);
                 }
                 value = getAddress(symbol);
             }
