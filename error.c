@@ -14,7 +14,7 @@ void errorInvalidComp(char *comp, int lineNumber, char *line) {
     printf("Line: %s\n\n", line);// Print the line of code that caused the error for better debugging
     errorCount++;
 }
-
+//ndfhp fkdlpd
 void errorInvalidDest(char *dest, int lineNumber, char *line) {
     printf("Error at line %d: Invalid dest '%s'\n", lineNumber, dest);
     printf("Expected: M, D, MD, A, AM, AD, AMD\n");
