@@ -99,77 +99,75 @@ if (binary[0] != '\0') {
 }
 
 int main() {
-   // Prompt the user to enter the name of the .asm file to be assembled. The filename is read from standard input and stored in the variable 'filename'. This allows the user to specify which assembly file they want to process.
+
     char filename[100];
+    char choice;
 
-    printf("Enter .asm file name: ");
-    scanf("%s", filename);
+    do {
+        printf("\nEnter .asm file name: ");
+        scanf("%s", filename);
 
-    FILE *input = fopen(filename, "r"); // r=read mode, open the specified file for reading. If the file cannot be opened (e.g., if it does not exist), the program will print an error message and exit with a non-zero status code. This ensures that the program does not proceed with an invalid input file, which could lead to further errors down the line.
+        FILE *input = fopen(filename, "r");
 
-    if (input == NULL) {
-        printf("Error: cannot open file %s\n", filename);
-        return 1;
-    }
+        if (input == NULL) {
+            printf("Error: cannot open file %s\n", filename);
+            continue; 
+        }
+     
+        char outputName[100];
+        strcpy(outputName, filename);
 
-    /* --------------------- */
+        char *dot = strrchr(outputName, '.');
+        if (dot != NULL) {
+            strcpy(dot, ".obj");
+        } else {
+            strcat(outputName, ".obj");
+        }
 
-    char outputName[100];
-    strcpy(outputName, filename);
+        printf("\nInput file opened successfully!\n");
+        printf("Output file will be: %s\n", outputName);
 
-    char *dot = strrchr(outputName, '.');
-
-    if (dot != NULL) {
-        strcpy(dot, ".obj");
-    } else {
-        strcat(outputName, ".obj");
-    }
-
+        
+        initSymbolTable();
+      errorCount = 0;
     
+        pass1(input);
 
-    printf("\nInput file opened successfully!\n");
-    printf("Output file will be: %s\n", outputName);
+        rewind(input);
 
-    /* ---------------------- */
+        pass2(input, NULL);
 
-    initSymbolTable(); // Initialize the symbol table before starting the assembly process. This function sets up the necessary data structures to store symbols and their corresponding addresses, which will be used during the first pass to populate the symbol table with labels and during the second pass to resolve symbols in A-instructions.
+        if (errorCount == 0) {
 
-    pass1(input); // Perform the first pass on the input file to populate the symbol table with labels and their corresponding addresses. This pass reads through the assembly code, identifies label definitions (L_COMMAND), and adds them to the symbol table. It also keeps track of the current address for A_COMMAND and C_COMMAND instructions, which is essential for resolving symbols in the second pass.
+            FILE *output = fopen(outputName, "w");
 
-    
-    rewind(input); // Reset the file pointer to the beginning of the input file after completing the first pass. This allows the second pass to read through the file again from the start, this time translating A_COMMAND and C_COMMAND instructions into their binary representations using the symbol table populated in the first pass.
+            if (output == NULL) {
+                printf("Error creating output file\n");
+                fclose(input);
+                continue;
+            }
 
-   
+            rewind(input);
+            pass2(input, output);
 
-    pass2(input, NULL);
-if (errorCount == 0) {
+            fclose(output);
 
-    FILE *output = fopen(outputName, "w");
+            printSymbolTable();
+            printf("\nTranslation finished successfully.\n");
 
-    if (output == NULL) {
-        printf("Error creating output file\n");
+        } else {
+            printf("\nSymbol table not generated due to errors.\n");
+            printf("%d errors found.\n", errorCount);
+        }
+
         fclose(input);
-        return 1;
-    }
 
-    rewind(input);// Reset the file pointer to the beginning of the input file again before starting the second pass, ensuring that we read through the file from the start for encoding.
+        
+        printf("\nDo you want to process another file? (y/n): ");
+        scanf(" %c", &choice); // space مهم
 
-    pass2(input, output);
+    } while (choice == 'y' || choice == 'Y');
 
-    fclose(output);// Close the output file after writing the encoded binary instructions. This is important to ensure that all data is properly flushed to the file and that system resources are released.
-
-    printSymbolTable();
-
-    printf("\nTranslation finished successfully.\n");
-
-} else {
-
-    printf("\nSymbol table not generated due to errors.\n");
-    printf("\n%d errors found.\n", errorCount);
-}
-    
-
-
-
+    printf("\nProgram terminated.\n");
     return 0;
 }
