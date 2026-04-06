@@ -71,7 +71,7 @@ int isValidCFormat(char *line) {
 
     if (eqCount > 1 || scCount > 1)
         return 0;
-
+ //ndfhp fkdlpd
     if (eqCount == 1) {
         if (line[0] == '=')
             return 0;
@@ -89,6 +89,6 @@ int isValidCFormat(char *line) {
         if (eq > sc)
             return 0;
     }
-
+ //ndfhp fkdlpd
     return 1;
 }
