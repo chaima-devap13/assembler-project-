@@ -1,0 +1,11 @@
+(START)
+@i
+M=1
+@sum
+M=0
+(LOOP)
+@END
+0;JMP
+(END)
+@END
+0;JMP
