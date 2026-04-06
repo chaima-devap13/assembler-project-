@@ -2,6 +2,7 @@
 #include <string.h>
 #include "code.h"
 #include"error.h"
+//ndfhp fkdlpd
    // into binary : from assambly via binary with shift and bitwise operations
 void intToBinary(int value, char *output) {
     for (int i = 0; i < 16; i++) {
@@ -80,7 +81,7 @@ char* compTable(char *comp, int lineNumber, char *line) {
     if (strcmp(comp, "M-D") == 0) return "1000111";
     if (strcmp(comp, "D&M") == 0) return "1000000";
     if (strcmp(comp, "D|M") == 0) return "1010101";
-
+// ndfhp fkdlpd 
     
     errorInvalidComp(comp, lineNumber, line);
 return NULL;
@@ -101,3 +102,4 @@ void encodeC(char *dest, char *comp, char *jump, char *output, int lineNumber, c
 
     sprintf(output, "111%s%s%s", compBits, destBits, jumpBits);
 }
+//ndfhp fkdlpd
