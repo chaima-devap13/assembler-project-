@@ -57,7 +57,7 @@ char* typeToString(SymbolType type) {
         case PREDEFINED: return "predefined";
         default: return "unknown";
     }
-}
+} //ndfhp fkdlpd
 // Prints the contents of the symbol table to the console. This function is useful for debugging purposes to verify that symbols are being added correctly during the first pass and to see the final state of the symbol table after processing the assembly file.
 
 #define RESET   "\033[0m"
@@ -93,7 +93,7 @@ void printSymbolTable() {
     printf("%s╠═════╦══════════════════════╦═════════╦══════════════╣%s\n", CYAN, RESET);
     printf("%s║ ID  ║ Name                 ║ Address ║ Type         ║%s\n", BOLD, RESET);
     printf("%s╠═════╬══════════════════════╬═════════╬══════════════╣%s\n", CYAN, RESET);
-
+ //ndfhp fkdlpd
     for (int i = 0; i < symbolCount; i++) {
         char *color;
         char *typeStr = typeToString(table[i].type);
